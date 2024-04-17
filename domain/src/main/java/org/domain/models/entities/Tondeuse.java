@@ -1,4 +1,4 @@
-package org.domain.models;
+package org.domain.models.entities;
 
 import lombok.*;
 import org.domain.enums.OrientationEnum;
