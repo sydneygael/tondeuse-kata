@@ -1,8 +1,6 @@
 package org.application.adapters.batch;
 
-import org.domain.factory.TondeuseCommandeFactoryImpl;
 import org.domain.service.TondeuseService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,13 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BatchTondeuseProcessorTest {
 
-    private BatchTondeuseProcessor batchTondeuseProcessor;
-
-    @BeforeEach
-    void setUp() {
-        var tondeuseService = new TondeuseService(new TondeuseCommandeFactoryImpl());
-        batchTondeuseProcessor = new BatchTondeuseProcessor(tondeuseService);
-    }
+    private final BatchTondeuseProcessor batchTondeuseProcessor = new BatchTondeuseProcessor(new TondeuseService());
 
     @Test
     void process_WithValidInput_ShouldReturnExpectedResult() throws Exception {

@@ -5,6 +5,7 @@ import org.domain.enums.CommandEnum;
 import org.domain.enums.OrientationEnum;
 import org.domain.exceptions.CommandNotFoundException;
 import org.domain.exceptions.OrientationNotFoundException;
+import org.domain.exceptions.UnknownCommandException;
 import org.domain.models.entities.SurfaceRectangle;
 import org.domain.models.entities.Tondeuse;
 import org.domain.models.valueobjects.Position;
@@ -18,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
@@ -62,13 +64,14 @@ public class BatchTondeuseProcessor implements ItemProcessor<String, String> {
             throw new IllegalArgumentException("Aucune tondeuse trouvée.");
         }
 
-        var stringBuilder = new StringBuilder();
-
-        for (var request : requests) {
-            stringBuilder.append(tondeuseService.handle(request));
-        }
-
-        return stringBuilder.toString();
+        return requests.stream().map(request -> {
+            try {
+                return tondeuseService.handle(request);
+            } catch (UnknownCommandException e) {
+                return "";
+            }
+        })
+                .collect(Collectors.joining(" "));
     }
 
     private boolean isCoordinate(String line) {

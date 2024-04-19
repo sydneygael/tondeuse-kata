@@ -40,12 +40,11 @@ public class AvancerCommande implements TondeuseCommande {
         int x = currentPosition.positionX();
         int y = currentPosition.positionY();
 
-        switch (orientation) {
+        return switch (orientation) {
             case NORTH -> Position.of(x, y + 1);
             case SOUTH -> Position.of(x, y - 1);
-            case EST -> Position.of(x + 1, y);
+            case EAST -> Position.of(x + 1, y);
             case WEST -> Position.of(x - 1, y);
-        }
-        return currentPosition;
+        };
     }
 }

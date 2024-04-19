@@ -27,10 +27,10 @@ public class PivoterDroiteCommande implements TondeuseCommande {
 
     private OrientationEnum pivotRight(OrientationEnum orientation) {
         return switch (orientation) {
-            case NORTH -> OrientationEnum.EST;
+            case NORTH -> OrientationEnum.EAST;
             case WEST -> OrientationEnum.NORTH;
             case SOUTH -> OrientationEnum.WEST;
-            case EST -> OrientationEnum.SOUTH;
+            case EAST -> OrientationEnum.SOUTH;
         };
     }
 }

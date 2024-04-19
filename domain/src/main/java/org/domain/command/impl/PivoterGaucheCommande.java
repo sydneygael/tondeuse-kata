@@ -29,8 +29,8 @@ public class PivoterGaucheCommande implements TondeuseCommande {
         return switch (orientation) {
             case NORTH -> OrientationEnum.WEST;
             case WEST -> OrientationEnum.SOUTH;
-            case SOUTH -> OrientationEnum.EST;
-            case EST -> OrientationEnum.NORTH;
+            case SOUTH -> OrientationEnum.EAST;
+            case EAST -> OrientationEnum.NORTH;
         };
     }
 }

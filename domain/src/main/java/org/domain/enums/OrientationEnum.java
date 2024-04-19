@@ -10,7 +10,7 @@ import java.util.Map;
 public enum OrientationEnum {
 
     NORTH("N"),
-    EST("E"),
+    EAST("E"),
     WEST("W"),
 
     SOUTH("S");
