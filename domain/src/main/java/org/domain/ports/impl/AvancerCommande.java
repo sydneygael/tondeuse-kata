@@ -21,17 +21,18 @@ public class AvancerCommande implements TondeuseCommande {
     private Surface surface;
 
     @Override
-    public boolean execute() {
+    public String execute() {
         Position currentPosition = tondeuse.getPosition();
         Position newPosition = moveForward(currentPosition, tondeuse.getOrientation());
 
         if (surface.isInside(newPosition)) {
             tondeuse.setPosition(newPosition);
-            log.info("Avancer: Nouvelle position - {}", tondeuse.getPosition());
-            return true;
+            var result = tondeuse.afficher();
+            log.info("Avancer: Nouvelle position - {}", result);
+            return result;
         } else {
             log.info("Avancer: Mouvement impossible, la tondeuse reste à sa position actuelle - {}", tondeuse.getPosition());
-            return false;
+            return tondeuse.afficher();
         }
     }
 

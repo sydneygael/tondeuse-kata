@@ -5,8 +5,11 @@ import org.domain.exceptions.UnknownCommandException;
 import org.domain.models.entities.Surface;
 import org.domain.models.entities.Tondeuse;
 
-public interface MoveTondeusePort {
-    boolean handle(TondeuseMoveRequest request) throws UnknownCommandException;
+import java.util.List;
 
-    record TondeuseMoveRequest(CommandEnum command, Tondeuse tondeuse, Surface surface) { }
+public interface MoveTondeusePort {
+    String handle(TondeuseMoveRequest request) throws UnknownCommandException;
+
+    record TondeuseMoveRequest(List<CommandEnum> commands, Tondeuse tondeuse, Surface surface) {
+    }
 }

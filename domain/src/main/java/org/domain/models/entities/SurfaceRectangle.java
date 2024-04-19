@@ -18,6 +18,8 @@ public class SurfaceRectangle implements Surface {
     private int hauteur;
     private int largeur;
 
+
+
     @Override
     public boolean isInside(Position position) {
         return position.positionX() >= positionInitial.positionX() &&

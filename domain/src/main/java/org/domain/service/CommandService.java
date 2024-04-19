@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.domain.enums.CommandEnum;
 import org.domain.exceptions.UnknownCommandException;
 import org.domain.factory.TondeuseCommandeFactory;
 import org.domain.factory.TondeuseCommandeFactoryImpl;
@@ -29,16 +30,20 @@ public class CommandService implements MoveTondeusePort {
 
 
     @Override
-    public boolean handle(TondeuseMoveRequest request) throws UnknownCommandException {
-        var command = request.command();
-        switch (command) {
-            case ADVANCE, RIGHT, LEFT -> {
-                return factory.getCommand(command, request.tondeuse(), request.surface()).execute();
-            }
-            default -> {
-                log.error("Unknown command: {}", command);
-                throw new UnknownCommandException("Unknown command");
+    public String handle(TondeuseMoveRequest request) throws UnknownCommandException {
+        var result = "";
+        for (CommandEnum commandEnum : request.commands()) {
+            switch (commandEnum) {
+                case ADVANCE, RIGHT, LEFT -> {
+                    result = factory.getCommand(commandEnum, request.tondeuse(), request.surface()).execute();
+                }
+                default -> {
+                    log.error("Unknown command: {}", commandEnum);
+                    throw new UnknownCommandException("Unknown command");
+                }
             }
         }
+
+        return result;
     }
 }

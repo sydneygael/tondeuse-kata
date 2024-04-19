@@ -18,4 +18,9 @@ public class Tondeuse {
     private Integer id;
     private Position position;
     private OrientationEnum orientation;
+
+    public String afficher() {
+        return position.positionX() + " " + position.positionY() + " " + orientation.getCode();
+    }
+
 }

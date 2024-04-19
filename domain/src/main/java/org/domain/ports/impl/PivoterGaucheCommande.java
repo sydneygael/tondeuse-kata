@@ -18,11 +18,11 @@ public class PivoterGaucheCommande implements TondeuseCommande {
     private Tondeuse tondeuse;
 
     @Override
-    public boolean execute() {
+    public String execute() {
         OrientationEnum newOrientation = pivotLeft(tondeuse.getOrientation());
         tondeuse.setOrientation(newOrientation);
         log.info("Pivoter à gauche: Nouvelle orientation - {}", newOrientation);
-        return true;
+        return tondeuse.afficher();
     }
 
     private OrientationEnum pivotLeft(OrientationEnum orientation) {

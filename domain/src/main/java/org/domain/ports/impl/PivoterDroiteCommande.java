@@ -14,15 +14,15 @@ import org.domain.ports.TondeuseCommande;
 @NoArgsConstructor
 @Slf4j
 public class PivoterDroiteCommande implements TondeuseCommande {
-    
+
     private Tondeuse tondeuse;
 
     @Override
-    public boolean execute() {
+    public String execute() {
         OrientationEnum newOrientation = pivotRight(tondeuse.getOrientation());
         tondeuse.setOrientation(newOrientation);
         log.info("Pivoter à gauche: Nouvelle orientation - {}", newOrientation);
-        return true;
+        return tondeuse.afficher();
     }
 
     private OrientationEnum pivotRight(OrientationEnum orientation) {
