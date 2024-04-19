@@ -1,6 +1,8 @@
 package org.application.adapters.batch.output;
 
 import org.domain.ports.ouput.WritePort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.Closeable;
@@ -10,13 +12,14 @@ import java.io.Writer;
 
 @Component
 public class FileWriterAdapter implements WritePort {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileWriterAdapter.class);
     @Override
     public void writeResult(String result, OutputStreamWriter stream) {
         try {
             writeString(result, stream);
         } catch (IOException e) {
-            // Gérer l'exception en fonction de vos besoins
-            e.printStackTrace();
+            LOGGER.error("une erreur s'est produite lors de l'écriture du flux : ",e);
         } finally {
             closeStream(stream);
         }
@@ -24,7 +27,7 @@ public class FileWriterAdapter implements WritePort {
 
     private void writeString(String result, Writer writer) throws IOException {
         writer.write(result);
-        writer.flush(); // Assurez-vous de vider le flux
+        writer.flush(); // vider le flux
     }
 
     private void closeStream(Closeable closeable) {
@@ -32,8 +35,7 @@ public class FileWriterAdapter implements WritePort {
             try {
                 closeable.close(); // Fermez le flux après utilisation
             } catch (IOException e) {
-                // Gérer l'exception en fonction de vos besoins
-                e.printStackTrace();
+                LOGGER.error("une erreur s'est produite lors de la fermeture du flux : ",e);
             }
         }
     }

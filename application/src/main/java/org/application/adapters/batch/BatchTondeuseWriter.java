@@ -1,8 +1,10 @@
 package org.application.adapters.batch;
 
-import org.application.adapters.batch.output.FileWriterAdapter;
+import lombok.AllArgsConstructor;
+import org.domain.ports.ouput.WritePort;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -10,17 +12,14 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 
 @Component
+@Qualifier("batchTondeuseWriter")
+@AllArgsConstructor
 public class BatchTondeuseWriter implements ItemWriter<String> {
 
-    private final FileWriterAdapter fileWriterAdapter;
+    private final WritePort fileWriterAdapter;
 
-    @Value("${output.file}")
+    @Value("${file.output}")
     private String outputFile;
-
-    public BatchTondeuseWriter(FileWriterAdapter fileWriterAdapter) {
-        this.fileWriterAdapter = fileWriterAdapter;
-    }
-
     @Override
     public void write(Chunk<? extends String> chunk) throws Exception {
         // Créer un flux de sortie pour stocker les résultats

@@ -1,60 +1,67 @@
 package org.application.config;
 
-import org.domain.ports.input.MoveTondeusePort;
+import org.application.adapters.batch.BatchTondeuseProcessor;
+import org.application.adapters.batch.BatchTondeuseWriter;
+import org.domain.ports.ouput.WritePort;
+import org.domain.service.TondeuseService;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.PassThroughLineMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
+@ComponentScan
+@EnableBatchProcessing
 public class BatchConfiguration {
-
-    private final JobBuilder jobBuilder; // Use JobBuilder
-    private final StepBuilder stepBuilder; // Use StepBuilder
-
-    private final MoveTondeusePort moveTondeusePort;
-
-    public BatchConfiguration(JobBuilder jobBuilder,
-                              StepBuilder stepBuilder,
-                              MoveTondeusePort moveTondeusePort) {
-        this.jobBuilder = jobBuilder;
-        this.stepBuilder = stepBuilder;
-        this.moveTondeusePort = moveTondeusePort;
-    }
-
     @Bean
-    public FlatFileItemReader<String> reader() {
+    public FlatFileItemReader<String> reader(@Value("${file.input}") String inputFilePath) {
         return new FlatFileItemReaderBuilder<String>()
                 .name("fileReader")
-                .resource(new ClassPathResource("path/to/your/file.txt"))
+                .resource(new ClassPathResource(inputFilePath))
                 .lineMapper(new PassThroughLineMapper())
                 .build();
     }
 
-
     @Bean
-    public Job myJob(JobRepository jobRepository, Step step) {
+    public Job tondeuseJob(final JobRepository jobRepository, @Qualifier("tondeuseStep") Step step) {
         return new JobBuilder("tondeuseJob", jobRepository)
                 .start(step)
                 .build();
     }
 
     @Bean
-    public Step step(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("tondeuseStep", jobRepository)
-                .chunk(100, transactionManager)
-                .build();
+    ItemProcessor<String, String> processor(TondeuseService service) {
+        return new BatchTondeuseProcessor(service);
     }
 
 
-    // Implement reader(), tondeuseItemProcessor(), and writer() methods here...
+    @Bean
+    @Qualifier("tondeuseStep")
+    public Step tondeuseStep(final JobRepository jobRepository,
+                             PlatformTransactionManager transactionManager,
+                             TondeuseService service,
+                             FlatFileItemReader<String> reader,
+                             @Qualifier("batchTondeuseWriter") BatchTondeuseWriter batchTondeuseWriter,
+                             WritePort fileWriterAdapter) {
+        return new StepBuilder("tondeuseStep", jobRepository)
+                .<String, String>chunk(100, transactionManager)
+                .reader(reader)
+                .processor(processor(service))
+                .writer(batchTondeuseWriter)
+                .build();
+    }
 
 }
