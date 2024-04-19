@@ -1,5 +1,6 @@
 package org.application.adapters.batch;
 
+import lombok.AllArgsConstructor;
 import org.domain.enums.CommandEnum;
 import org.domain.enums.OrientationEnum;
 import org.domain.exceptions.CommandNotFoundException;
@@ -7,7 +8,8 @@ import org.domain.exceptions.OrientationNotFoundException;
 import org.domain.models.entities.SurfaceRectangle;
 import org.domain.models.entities.Tondeuse;
 import org.domain.models.valueobjects.Position;
-import org.domain.ports.MoveTondeusePort;
+import org.domain.ports.input.MoveTondeusePort;
+import org.domain.service.TondeuseService;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
@@ -18,14 +20,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class BatchTondeuseProcessor implements ItemProcessor<String, List<MoveTondeusePort.TondeuseMoveRequest>> {
+@AllArgsConstructor
+public class BatchTondeuseProcessor implements ItemProcessor<String, String> {
 
     private static final Pattern COORDINATE_PATTERN = Pattern.compile("(\\d+) (\\d+) (N|E|W|S)");
     private static final Pattern DIMENTIONS_PATTERN = Pattern.compile("(\\d+) (\\d+)");
     private static final Pattern INSTRUCTIONS_PATTERN = Pattern.compile("[ADG]+");
 
+    private final TondeuseService tondeuseService;
+
     @Override
-    public List<MoveTondeusePort.TondeuseMoveRequest> process(String input) throws Exception {
+    public String process(String input) throws Exception {
         Iterator<String> linesIterator = input.lines().iterator();
 
         // Traitement de la première ligne pour obtenir les rectangleDimentions de la surface
@@ -57,7 +62,13 @@ public class BatchTondeuseProcessor implements ItemProcessor<String, List<MoveTo
             throw new IllegalArgumentException("Aucune tondeuse trouvée.");
         }
 
-        return requests;
+        var stringBuilder = new StringBuilder();
+
+        for (var request : requests) {
+            stringBuilder.append(tondeuseService.handle(request));
+        }
+
+        return stringBuilder.toString();
     }
 
     private boolean isCoordinate(String line) {

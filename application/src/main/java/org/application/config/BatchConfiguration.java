@@ -1,7 +1,6 @@
 package org.application.config;
 
-import org.domain.ports.MoveTondeusePort;
-import org.springframework.batch.core.ItemProcessListener;
+import org.domain.ports.input.MoveTondeusePort;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;

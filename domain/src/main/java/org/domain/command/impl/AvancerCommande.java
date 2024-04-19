@@ -1,4 +1,4 @@
-package org.domain.ports.impl;
+package org.domain.command.impl;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -6,7 +6,7 @@ import org.domain.enums.OrientationEnum;
 import org.domain.models.entities.Surface;
 import org.domain.models.entities.Tondeuse;
 import org.domain.models.valueobjects.Position;
-import org.domain.ports.TondeuseCommande;
+import org.domain.command.TondeuseCommande;
 
 @Getter
 @Setter

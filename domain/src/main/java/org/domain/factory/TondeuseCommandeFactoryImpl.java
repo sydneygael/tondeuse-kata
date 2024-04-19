@@ -3,10 +3,10 @@ package org.domain.factory;
 import org.domain.enums.CommandEnum;
 import org.domain.models.entities.Surface;
 import org.domain.models.entities.Tondeuse;
-import org.domain.ports.TondeuseCommande;
-import org.domain.ports.impl.AvancerCommande;
-import org.domain.ports.impl.PivoterDroiteCommande;
-import org.domain.ports.impl.PivoterGaucheCommande;
+import org.domain.command.TondeuseCommande;
+import org.domain.command.impl.AvancerCommande;
+import org.domain.command.impl.PivoterDroiteCommande;
+import org.domain.command.impl.PivoterGaucheCommande;
 
 public class TondeuseCommandeFactoryImpl implements TondeuseCommandeFactory {
     private static final PivoterGaucheCommande PIVOTER_GAUCHE_COMMANDE = new PivoterGaucheCommande();

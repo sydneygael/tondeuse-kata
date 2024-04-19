@@ -1,4 +1,4 @@
-package org.domain.ports;
+package org.domain.command;
 
 import org.domain.models.valueobjects.Position;
 

@@ -1,33 +1,15 @@
 package org.domain.service;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
+import lombok.AllArgsConstructor;
 import org.domain.enums.CommandEnum;
 import org.domain.exceptions.UnknownCommandException;
 import org.domain.factory.TondeuseCommandeFactory;
-import org.domain.factory.TondeuseCommandeFactoryImpl;
-import org.domain.ports.MoveTondeusePort;
+import org.domain.ports.input.MoveTondeusePort;
 
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@Slf4j
-public class CommandService implements MoveTondeusePort {
+@AllArgsConstructor
+public class TondeuseService implements MoveTondeusePort {
 
     private final TondeuseCommandeFactory factory;
-
-    public CommandService() {
-        factory = new TondeuseCommandeFactoryImpl();
-    }
-
-    public CommandService(TondeuseCommandeFactory tondeuseCommandeFactory) {
-        this.factory = tondeuseCommandeFactory;
-    }
-
 
     @Override
     public String handle(TondeuseMoveRequest request) throws UnknownCommandException {
@@ -36,9 +18,9 @@ public class CommandService implements MoveTondeusePort {
             switch (commandEnum) {
                 case ADVANCE, RIGHT, LEFT -> {
                     result = factory.getCommand(commandEnum, request.tondeuse(), request.surface()).execute();
+                    return result;
                 }
                 default -> {
-                    log.error("Unknown command: {}", commandEnum);
                     throw new UnknownCommandException("Unknown command");
                 }
             }
