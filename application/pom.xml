@@ -14,6 +14,7 @@
     <properties>
         <java.version>21</java.version>
         <springboot.version>3.2.5</springboot.version>
+        <start-class>org.application.TondeuseApplication</start-class>
     </properties>
     <dependencies>
         <dependency>
@@ -66,11 +67,20 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <finalName>tondeuse-application</finalName>
+                    <mainClass>org.application.TondeuseApplication</mainClass>
+                    <layout>JAR</layout>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

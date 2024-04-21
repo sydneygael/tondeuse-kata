@@ -17,9 +17,10 @@ docker build -t tondeuse-app .
 REM Étape 3: Exécution du conteneur Docker avec deux volumes
 echo Exécution du conteneur Docker...
 docker run ^
-    -v .\src\main\resources:/app/input/fileInput ^
-    -v .\src\main\resources:/app/output ^
+    -v .\src\main\resources\fileInput:/app/input/fileInput ^
+    -v .\src\main\resources\resultFile:/app/output/fileOutput ^
     --name tondeuse-container ^
+    -e "SPRING_PROFILES_ACTIVE=docker" ^
     -d tondeuse-app
 
 REM Afficher le résultat
