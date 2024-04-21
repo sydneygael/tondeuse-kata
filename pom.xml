@@ -11,14 +11,19 @@
     <modules>
         <module>domain</module>
         <module>application</module>
-        <module>application</module>
     </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <springboot.version>3.2.5</springboot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>local-repo</id>
+            <url>file://${user.home}/.m2/repository</url>
+        </repository>
+    </repositories>
 
 </project>
