@@ -8,5 +8,5 @@ public interface Surface {
      * @param position
      * @return
      */
-    boolean isInside(Position position);
+    boolean contientPosition(Position position);
 }

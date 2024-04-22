@@ -22,10 +22,10 @@ public class AvancerCommande implements TondeuseCommande {
 
     @Override
     public String execute() {
-        Position currentPosition = tondeuse.getPosition();
-        Position newPosition = moveForward(currentPosition, tondeuse.getOrientation());
+        var currentPosition = tondeuse.getPosition();
+        var newPosition = moveForward(currentPosition, tondeuse.getOrientation());
 
-        if (surface.isInside(newPosition)) {
+        if (surface.contientPosition(newPosition)) {
             tondeuse.setPosition(newPosition);
             var result = tondeuse.afficher();
             log.info("Avancer: Nouvelle position - {}", result);

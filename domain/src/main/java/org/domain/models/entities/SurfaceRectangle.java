@@ -21,7 +21,7 @@ public class SurfaceRectangle implements Surface {
 
 
     @Override
-    public boolean isInside(Position position) {
+    public boolean contientPosition(Position position) {
         return position.positionX() >= positionInitial.positionX() &&
                 position.positionX() <= positionInitial.positionX() + hauteur &&
                 position.positionY() >= positionInitial.positionY() &&
