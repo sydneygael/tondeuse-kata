@@ -17,7 +17,6 @@ public class TondeuseController {
 
     private final MoveTondeusePort moveTondeusePort;
 
-    @Autowired
     public TondeuseController(TondeuseService moveTondeusePort) {
         this.moveTondeusePort = moveTondeusePort;
     }

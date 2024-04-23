@@ -12,11 +12,11 @@ import { CommonModule } from '@angular/common';
 })
 export class CommandInputComponent {
 
-  positionX: number = 0;
-  positionY: number = 0;
+  positionX: number = 5;
+  positionY: number = 5;
   @Input() selectedCommands: Array<string> = [];
-  orientation: any = "N";
-  orientations = ["N","E","W","S"];
+  orientation: string = "NORTH";
+  orientations = ['NORTH', 'WEST', 'SOUTH', 'EAST'];
 
 
   constructor(private commandSerice : CommandService) { }
@@ -36,16 +36,22 @@ export class CommandInputComponent {
     const body = {
       commands: this.selectedCommands,
       tondeuse: {
-        positionX: this.positionX,
-        positionY: this.positionY,
+        position: {
+          positionX: this.positionX,
+          positionY: this.positionY
+        },
         orientation: this.orientation
       },
       surface: {
-        width: 0, // Valeur par défaut pour la largeur de la surface
-        height: 0 // Valeur par défaut pour la hauteur de la surface
-        // Ajoutez d'autres propriétés de la surface si nécessaire
+        positionInitial: {
+          positionX: 0,
+          positionY: 0,
+        },
+        width: 10, // Valeur par défaut pour la largeur de la surface
+        height: 10
       }
     };
+    console.log('body :',body);
 
     this.commandSerice.submitForm(body)
       .subscribe(response => {
