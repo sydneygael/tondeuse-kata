@@ -18,10 +18,11 @@ REM Étape 3: Exécution du conteneur Docker avec deux volumes
 echo Exécution du conteneur Docker...
 docker run ^
     -v .\src\main\resources\fileInput:/app/input/fileInput ^
-    -v .\src\main\resources\resultFile:/app/output/fileOutput ^
+    -v .\src\main\resources:/app/output ^
     --name tondeuse-container ^
     -e "SPRING_PROFILES_ACTIVE=docker" ^
-    -d tondeuse-app
+    -d tondeuse-app ^
+    -p 9000:9000
 
 REM Afficher le résultat
 echo L'application est en cours d'exécution dans le conteneur Docker.
