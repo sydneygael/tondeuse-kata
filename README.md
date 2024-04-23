@@ -14,6 +14,29 @@ cd application && ./run-app-docker.bat
 
 N'oubliez pas de remplacer les properties de l'input et output dans le fichier `/chemin/vers/votre/application-docker.properties` ou `/chemin/vers/votre/application.properties`
 
+## Tester en API REST
+
+```bash
+curl -X POST http://localhost:9000/api/tondeuse/command \
+  -H "Content-Type: application/json" \
+  -d '{
+    "commands": ["LEFT", "ADVANCE", "RIGHT"],
+    "tondeuse": {
+      "positionX": 3,
+      "positionY": 5,
+      "orientation": "NORTH"
+    },
+    "surface": {
+      "positionInitial": {
+        "positionX": 0,
+        "positionY": 0
+      },
+      "hauteur": 10,
+      "largeur": 10
+    }
+  }'
+
+```
 # La tondeuse
 
 La société MowItNow a décidé de développer une tondeuse à gazon automatique, destinée aux surfaces rectangulaires.
