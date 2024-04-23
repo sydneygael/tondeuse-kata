@@ -16,6 +16,8 @@
       <li *ngFor="let command of selectedCommands">{{ command }}</li>
     </ul>
 
+    <input id="textResult" name="textResult" [(ngModel)]="textResult" disabled/>
+
     <!-- Bouton pour ajouter une commande -->
     <div class="button-group">
       <button type="button" (click)="addCommand('LEFT')">Ajouter Gauche</button>

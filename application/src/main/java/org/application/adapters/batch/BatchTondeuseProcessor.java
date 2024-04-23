@@ -53,7 +53,7 @@ public class BatchTondeuseProcessor implements ItemProcessor<String, String> {
                     throw new IllegalArgumentException("Aucune instruction trouvée pour la tondeuse.");
                 }
 
-                String instructionsLine = linesIterator.next();
+                var instructionsLine = linesIterator.next();
                 List<CommandEnum> commands = extractCommands(instructionsLine);
 
                 requests.add(new MoveTondeusePort.TondeuseMoveRequest(commands, tondeuse, surface));

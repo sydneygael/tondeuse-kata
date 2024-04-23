@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { CommandService } from '../services/command.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { OrientationEnum } from './orientation-enum';
+import { Observable, Observer, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-command-input',
@@ -15,11 +17,15 @@ export class CommandInputComponent {
   positionX: number = 5;
   positionY: number = 5;
   @Input() selectedCommands: Array<string> = [];
-  orientation: string = "NORTH";
-  orientations = ['NORTH', 'WEST', 'SOUTH', 'EAST'];
+  orientation: OrientationEnum = OrientationEnum.NORTH;
+  orientations: Array<OrientationEnum> = [OrientationEnum.NORTH,OrientationEnum.EAST,OrientationEnum.WEST,OrientationEnum.SOUTH];
+  textResult: string = 'No result';
+  textResultPipe = new Observable<void>(() => {
+    this.resetCommands();
+  });
 
-
-  constructor(private commandSerice : CommandService) { }
+  constructor(private commandSerice: CommandService) {
+  }
 
   addCommand(command: string) {
     if (this.selectedCommands.length < 5) {
@@ -29,10 +35,6 @@ export class CommandInputComponent {
 
   submitForm() {
     console.log('Form submitted!');
-    console.log('Position X:', this.positionX);
-    console.log('Position Y:', this.positionY);
-    console.log('Orientation:', this.orientation);
-    console.log('Selected Commands:', this.selectedCommands);
     const body = {
       commands: this.selectedCommands,
       tondeuse: {
@@ -54,9 +56,14 @@ export class CommandInputComponent {
     console.log('body :',body);
 
     this.commandSerice.submitForm(body)
-      .subscribe(response => {
-        console.log('Réponse du serveur : ', response);
-      });
+      .pipe(switchMap((response) => {
+        this.textResult = response;
+        return this.textResultPipe;
+      })).subscribe();
+  }
+
+  resetCommands(): void {
+    this.selectedCommands = [];
   }
 
 }

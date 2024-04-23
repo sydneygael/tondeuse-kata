@@ -11,6 +11,6 @@ export class CommandService {
 
   submitForm(body: any) {
     const url = `${this.configService.baseUrl}/api/tondeuse/command`; // url complète
-    return this.http.post(url, body);
+    return this.http.post(url, body, { responseType : 'text' });
   }
 }
