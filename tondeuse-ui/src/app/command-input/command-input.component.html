@@ -1,0 +1,28 @@
+<div class="command-input-container">
+  <form (ngSubmit)="submitForm()">
+    <label for="positionX">Position X:</label>
+    <input type="number" id="positionX" name="positionX" [(ngModel)]="positionX" required>
+
+    <label for="positionY">Position Y:</label>
+    <input type="number" id="positionY" name="positionY" [(ngModel)]="positionY" required>
+
+    <label for="orientation">Orientation:</label>
+    <select id="orientation" name="orientation" [(ngModel)]="orientation" required>
+      <option *ngFor="let orientation of orientations" [value]="orientation">{{ orientation }}</option>
+    </select>
+
+    <label for="commands">Liste des commandes ajoutées:</label>
+    <ul>
+      <li *ngFor="let command of selectedCommands">{{ command }}</li>
+    </ul>
+
+    <!-- Bouton pour ajouter une commande -->
+    <div class="button-group">
+      <button type="button" (click)="addCommand('LEFT')">Ajouter Gauche</button>
+      <button type="button" (click)="addCommand('ADVANCE')">Ajouter Avancer</button>
+      <button type="button" (click)="addCommand('RIGHT')">Ajouter Droite</button>
+      <button type="submit">Envoyer</button>
+    </div>
+    
+  </form>
+</div>

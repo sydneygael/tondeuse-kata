@@ -19,7 +19,7 @@ public class PivoterDroiteCommande implements TondeuseCommande {
 
     @Override
     public String execute() {
-        OrientationEnum newOrientation = pivotRight(tondeuse.getOrientation());
+        var newOrientation = pivotRight(tondeuse.getOrientation());
         tondeuse.setOrientation(newOrientation);
         log.info("Pivoter à gauche: Nouvelle orientation - {}", newOrientation);
         return tondeuse.afficher();
