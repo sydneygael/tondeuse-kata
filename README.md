@@ -2,6 +2,7 @@
 - Architecture hexagonale en utilisant des modules maven (application, domain).
 - Design Pattern command pour les commandes
 - Maven et docker pour le packaging
+- Angular 17 pour l'UI
 
 ## Lancement de l'application
 
