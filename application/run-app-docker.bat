@@ -21,8 +21,8 @@ docker run ^
     -v .\src\main\resources:/app/output ^
     --name tondeuse-container ^
     -e "SPRING_PROFILES_ACTIVE=docker" ^
-    -d tondeuse-app ^
-    -p 9000:9000
+    -p 9000:9000 ^
+    -d tondeuse-app
 
 REM Afficher le résultat
 echo L'application est en cours d'exécution dans le conteneur Docker.
