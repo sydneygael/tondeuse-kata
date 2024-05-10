@@ -12,7 +12,6 @@ import org.domain.models.valueobjects.Position;
 import org.domain.ports.input.MoveTondeusePort;
 import org.domain.service.TondeuseService;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,11 +20,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-@Component
+
 @AllArgsConstructor
 public class BatchTondeuseProcessor implements ItemProcessor<String, String> {
 
-    private static final Pattern COORDINATE_PATTERN = Pattern.compile("(\\d+) (\\d+) (N|E|W|S)");
+    private static final Pattern COORDINATE_PATTERN = Pattern.compile("(\\d+) (\\d+) ([NEWS])");
     private static final Pattern DIMENTIONS_PATTERN = Pattern.compile("(\\d+) (\\d+)");
     private static final Pattern INSTRUCTIONS_PATTERN = Pattern.compile("[ADG]+");
 
@@ -35,10 +34,10 @@ public class BatchTondeuseProcessor implements ItemProcessor<String, String> {
     public String process(String input) throws Exception {
         Iterator<String> linesIterator = input.lines().iterator();
 
-        // Traitement de la première ligne pour obtenir les rectangleDimentions de la surface
+        // Traitement de la première ligne pour obtenir les rectangle Dimensions de la surface
         var positionRectangleLine = linesIterator.next();
         var rectangleDimentions = extractSurfaceDimentions(positionRectangleLine);
-        var surface = new SurfaceRectangle(Position.of(0, 0), rectangleDimentions[0], rectangleDimentions[1]);
+        var surface = new SurfaceRectangle(Position.of(0, 0, null), rectangleDimentions[0], rectangleDimentions[1]);
 
         List<MoveTondeusePort.TondeuseMoveRequest> requests = new ArrayList<>();
         var index = 1;
@@ -65,12 +64,12 @@ public class BatchTondeuseProcessor implements ItemProcessor<String, String> {
         }
 
         return requests.stream().map(request -> {
-            try {
-                return tondeuseService.handle(request);
-            } catch (UnknownCommandException e) {
-                return "";
-            }
-        })
+                    try {
+                        return tondeuseService.handle(request);
+                    } catch (UnknownCommandException e) {
+                        return "";
+                    }
+                })
                 .collect(Collectors.joining(" "));
     }
 
@@ -94,9 +93,9 @@ public class BatchTondeuseProcessor implements ItemProcessor<String, String> {
         if (matcher.matches()) {
             int positionX = Integer.parseInt(matcher.group(1));
             int positionY = Integer.parseInt(matcher.group(2));
-            var position = Position.of(positionX, positionY);
             var orientation = OrientationEnum.of(String.valueOf(matcher.group(3)));
-            return new Tondeuse(index, position, orientation);
+            var position = Position.of(positionX, positionY, orientation);
+            return new Tondeuse(index, position);
         } else {
             throw new IllegalArgumentException("Format de ligne de position invalide: " + coordinateLine);
         }

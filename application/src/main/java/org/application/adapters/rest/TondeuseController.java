@@ -2,7 +2,6 @@ package org.application.adapters.rest;
 
 import org.domain.exceptions.UnknownCommandException;
 import org.domain.ports.input.MoveTondeusePort;
-import org.domain.service.TondeuseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class TondeuseController {
 
     private final MoveTondeusePort moveTondeusePort;
-
-    public TondeuseController(TondeuseService moveTondeusePort) {
+    
+    public TondeuseController(MoveTondeusePort moveTondeusePort) {
         this.moveTondeusePort = moveTondeusePort;
     }
 

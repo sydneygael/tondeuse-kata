@@ -2,7 +2,6 @@ package org.domain.ports.input;
 
 import org.domain.enums.CommandEnum;
 import org.domain.exceptions.UnknownCommandException;
-import org.domain.models.entities.Surface;
 import org.domain.models.entities.SurfaceRectangle;
 import org.domain.models.entities.Tondeuse;
 

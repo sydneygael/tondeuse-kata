@@ -18,7 +18,7 @@ class AvancerCommandeTest {
         var surface = Mockito.mock(Surface.class);
         when(surface.contientPosition(any())).thenReturn(true);
 
-        var tondeuse = new Tondeuse(1, new Position(2, 1), OrientationEnum.NORTH);
+        var tondeuse = new Tondeuse(1, new Position(2, 1, OrientationEnum.NORTH));
         var avancerCommande = new AvancerCommande(tondeuse, surface);
 
         // When
@@ -35,7 +35,7 @@ class AvancerCommandeTest {
         var surface = Mockito.mock(Surface.class);
         when(surface.contientPosition(any())).thenReturn(true);
 
-        var tondeuse = new Tondeuse(1, new Position(2, 2), OrientationEnum.SOUTH);
+        var tondeuse = new Tondeuse(1, new Position(2, 2, OrientationEnum.SOUTH));
         var avancerCommande = new AvancerCommande(tondeuse, surface);
 
         // When
@@ -52,7 +52,7 @@ class AvancerCommandeTest {
         var surface = Mockito.mock(Surface.class);
         when(surface.contientPosition(any())).thenReturn(false);
 
-        var tondeuse = new Tondeuse(1, new Position(2, 3), OrientationEnum.SOUTH);
+        var tondeuse = new Tondeuse(1, new Position(2, 3, OrientationEnum.SOUTH));
         var avancerCommande = new AvancerCommande(tondeuse, surface);
 
         // When

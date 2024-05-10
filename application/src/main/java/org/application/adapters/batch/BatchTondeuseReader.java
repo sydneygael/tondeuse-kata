@@ -3,19 +3,20 @@ package org.application.adapters.batch;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.item.ItemReader;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 
 @AllArgsConstructor
 public class BatchTondeuseReader implements ItemReader<String> {
-
-    private String filePath;
-    private boolean read = false;
+    
+    private File filePath;
+    private boolean read;
     @Override
     public String read() throws Exception {
         if(read) {
-            Path path = Path.of(filePath);
+            Path path = filePath.toPath();
             read = false;
             return Files.readString(path);
         }

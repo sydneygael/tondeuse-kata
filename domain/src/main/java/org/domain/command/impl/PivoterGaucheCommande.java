@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.domain.enums.OrientationEnum;
 import org.domain.models.entities.Tondeuse;
 import org.domain.command.TondeuseCommande;
+import org.domain.models.valueobjects.Position;
 
 @Getter
 @Setter
@@ -19,10 +20,13 @@ public class PivoterGaucheCommande implements TondeuseCommande {
 
     @Override
     public String execute() {
-        var newOrientation = pivotLeft(tondeuse.getOrientation());
-        tondeuse.setOrientation(newOrientation);
-        log.info("Pivoter à gauche: Nouvelle orientation - {}", newOrientation);
-        return tondeuse.afficher();
+        var currentPosition = tondeuse.getPosition();
+        var newPosition = Position.at(currentPosition.positionX(),currentPosition.positionY())
+                .pointing(pivotLeft(currentPosition.orientation()));
+        tondeuse.setPosition(newPosition);
+        var newPositionStr = newPosition.afficher();
+        log.info("Pivoter à gauche: Nouvelle orientation - {}", newPositionStr);
+        return newPositionStr;
     }
 
     private OrientationEnum pivotLeft(OrientationEnum orientation) {

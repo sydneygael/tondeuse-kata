@@ -5,6 +5,7 @@ import org.domain.ports.ouput.WritePort;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 
@@ -12,7 +13,7 @@ import java.io.OutputStreamWriter;
 public class BatchTondeuseWriter implements ItemWriter<String> {
 
     private final WritePort fileWriterAdapter;
-    private String outputFile;
+    private File outputFile;
 
     @Override
     public void write(Chunk<? extends String> chunk) throws Exception {

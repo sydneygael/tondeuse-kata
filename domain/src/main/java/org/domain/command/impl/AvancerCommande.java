@@ -23,16 +23,16 @@ public class AvancerCommande implements TondeuseCommande {
     @Override
     public String execute() {
         var currentPosition = tondeuse.getPosition();
-        var newPosition = moveForward(currentPosition, tondeuse.getOrientation());
+        var newPosition = moveForward(currentPosition, currentPosition.orientation());
 
         if (surface.contientPosition(newPosition)) {
             tondeuse.setPosition(newPosition);
-            var result = tondeuse.afficher();
-            log.info("Avancer: Nouvelle position - {}", result);
+            var result = newPosition.afficher();
+            log.info("Avancer: Nouvelle position - {}", newPosition.afficher());
             return result;
         } else {
             log.info("Avancer: Mouvement impossible, la tondeuse reste à sa position actuelle - {}", tondeuse.getPosition());
-            return tondeuse.afficher();
+            return currentPosition.afficher();
         }
     }
 
@@ -41,10 +41,10 @@ public class AvancerCommande implements TondeuseCommande {
         int y = currentPosition.positionY();
 
         return switch (orientation) {
-            case NORTH -> Position.of(x, y + 1);
-            case SOUTH -> Position.of(x, y - 1);
-            case EAST -> Position.of(x + 1, y);
-            case WEST -> Position.of(x - 1, y);
+            case NORTH -> Position.of(x, y + 1,orientation);
+            case SOUTH -> Position.of(x, y - 1,orientation);
+            case EAST -> Position.of(x + 1, y,orientation);
+            case WEST -> Position.of(x - 1, y,orientation);
         };
     }
 }
