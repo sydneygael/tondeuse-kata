@@ -1,5 +1,6 @@
 package org.application.adapters.batch;
 
+import org.application.usescases.DeplacerTondeuse;
 import org.domain.service.TondeuseService;
 import org.junit.jupiter.api.Test;
 
@@ -8,19 +9,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BatchTondeuseProcessorTest {
 
-    private final BatchTondeuseProcessor batchTondeuseProcessor = new BatchTondeuseProcessor(new TondeuseService());
+    private final BatchTondeuseProcessor batchTondeuseProcessor = new BatchTondeuseProcessor(new DeplacerTondeuse(new TondeuseService()));
 
     @Test
     void process_WithValidInput_ShouldReturnExpectedResult() throws Exception {
         // Given
-        String input = "5 5\n" +
+        var input = "5 5\n" +
                 "1 2 N\n" +
                 "GAGAGAGAA\n" +
                 "3 3 E\n" +
                 "AADAADADDA";
 
         // When
-        String result = batchTondeuseProcessor.process(input);
+        var result = batchTondeuseProcessor.process(input);
 
         // Then
         assertEquals("1 3 N 5 1 E", result);
@@ -41,7 +42,7 @@ class BatchTondeuseProcessorTest {
     @Test
     void process_WithNoTondeuse_ShouldThrowIllegalArgumentException() {
         // Given
-        String input = "5 5";
+        var input = "5 5";
 
         // When & Then
         assertThrows(IllegalArgumentException.class, () -> {

@@ -4,22 +4,24 @@ import org.domain.command.impl.AvancerCommande;
 import org.domain.command.impl.PivoterDroiteCommande;
 import org.domain.command.impl.PivoterGaucheCommande;
 import org.domain.enums.CommandEnum;
-import org.domain.exceptions.UnknownCommandException;
-import org.domain.ports.input.MoveTondeusePort;
+import org.domain.models.entities.SurfaceRectangle;
+import org.domain.models.entities.Tondeuse;
 
-public class TondeuseService implements MoveTondeusePort {
-  
-  @Override
-  public String handle(TondeuseMoveRequest request) throws UnknownCommandException {
-    var result = "";
-    for (CommandEnum commandEnum : request.commands()) {
-      switch (commandEnum) {
-        case ADVANCE -> result = new AvancerCommande(request.tondeuse(), request.surface()).execute();
-        case LEFT -> result = new PivoterGaucheCommande(request.tondeuse()).execute();
-        case RIGHT -> result = new PivoterDroiteCommande(request.tondeuse()).execute();
-      }
+import java.util.List;
+
+public class TondeuseService {
+
+
+    public String deplacerTondeuse(List<CommandEnum> commands, Tondeuse tondeuse, SurfaceRectangle surface) {
+        var result = "";
+        for (CommandEnum commandEnum : commands) {
+            switch (commandEnum) {
+                case ADVANCE -> result = new AvancerCommande(tondeuse, surface).execute();
+                case LEFT -> result = new PivoterGaucheCommande(tondeuse).execute();
+                case RIGHT -> result = new PivoterDroiteCommande(tondeuse).execute();
+            }
+        }
+
+        return result;
     }
-    
-    return result;
-  }
 }

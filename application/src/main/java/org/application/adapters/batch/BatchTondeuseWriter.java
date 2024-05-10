@@ -1,7 +1,7 @@
 package org.application.adapters.batch;
 
 import lombok.AllArgsConstructor;
-import org.domain.ports.ouput.WritePort;
+import org.application.ports.ouput.WritePort;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 

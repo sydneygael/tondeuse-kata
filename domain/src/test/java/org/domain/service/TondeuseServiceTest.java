@@ -5,7 +5,6 @@ import org.domain.exceptions.UnknownCommandException;
 import org.domain.models.entities.SurfaceRectangle;
 import org.domain.models.entities.Tondeuse;
 import org.domain.models.valueobjects.Position;
-import org.domain.ports.input.MoveTondeusePort.TondeuseMoveRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -32,7 +31,7 @@ class TondeuseServiceTest {
     var surface = new SurfaceRectangle(position, 5, 5);
     
     // When
-    var result = tondeuseService.handle(new TondeuseMoveRequest(singletonList(command), tondeuse, surface));
+    var result = tondeuseService.deplacerTondeuse(singletonList(command), tondeuse, surface);
     
     // Then
     switch (command) {

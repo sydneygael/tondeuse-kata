@@ -1,4 +1,4 @@
-package org.domain.ports.ouput;
+package org.application.ports.ouput;
 
 import java.io.OutputStreamWriter;
 

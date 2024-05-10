@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.domain.models.entities.SurfaceRectangle;
 import org.domain.models.entities.Tondeuse;
 import org.domain.models.valueobjects.Position;
-import org.domain.ports.input.MoveTondeusePort;
-import org.domain.ports.input.MoveTondeusePort.TondeuseMoveRequest;
+import org.application.ports.input.MoveTondeusePort;
+import org.application.ports.input.MoveTondeusePort.DeplacerTondeuseRequete;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -37,16 +37,16 @@ class TondeuseControllerTest {
   @Test
   void testMoveTondeuseWithOkResponse() throws Exception {
     var position = Position.of(3, 3, NORTH);
-    TondeuseMoveRequest tondeuseMoveRequest = new TondeuseMoveRequest(
+    DeplacerTondeuseRequete deplacerTondeuseRequete = new DeplacerTondeuseRequete(
         List.of(LEFT, ADVANCE, RIGHT),
         new Tondeuse(1, position),
         new SurfaceRectangle(position, 10, 10));
-    when(moveTondeusePort.handle(tondeuseMoveRequest))
+    when(moveTondeusePort.handle(deplacerTondeuseRequete))
         .thenReturn("2 3 N");
     
     mockMvc.perform(post("/api/tondeuse/command")
                .contentType(APPLICATION_JSON)
-               .content(objectMapper.writeValueAsBytes(tondeuseMoveRequest)))
+               .content(objectMapper.writeValueAsBytes(deplacerTondeuseRequete)))
            .andExpect(status().isOk())
            .andExpect(content().string("2 3 N"));
   }

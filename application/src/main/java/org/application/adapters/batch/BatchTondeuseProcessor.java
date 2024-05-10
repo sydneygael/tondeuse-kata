@@ -1,6 +1,8 @@
 package org.application.adapters.batch;
 
 import lombok.AllArgsConstructor;
+import org.application.ports.input.MoveTondeusePort;
+import org.application.usescases.DeplacerTondeuse;
 import org.domain.enums.CommandEnum;
 import org.domain.enums.OrientationEnum;
 import org.domain.exceptions.CommandNotFoundException;
@@ -9,8 +11,6 @@ import org.domain.exceptions.UnknownCommandException;
 import org.domain.models.entities.SurfaceRectangle;
 import org.domain.models.entities.Tondeuse;
 import org.domain.models.valueobjects.Position;
-import org.domain.ports.input.MoveTondeusePort;
-import org.domain.service.TondeuseService;
 import org.springframework.batch.item.ItemProcessor;
 
 import java.util.ArrayList;
@@ -28,44 +28,44 @@ public class BatchTondeuseProcessor implements ItemProcessor<String, String> {
     private static final Pattern DIMENTIONS_PATTERN = Pattern.compile("(\\d+) (\\d+)");
     private static final Pattern INSTRUCTIONS_PATTERN = Pattern.compile("[ADG]+");
 
-    private final TondeuseService tondeuseService;
+    private final DeplacerTondeuse deplacerTondeuse;
 
     @Override
     public String process(String input) throws Exception {
         Iterator<String> linesIterator = input.lines().iterator();
 
-        // Traitement de la première ligne pour obtenir les rectangle Dimensions de la surface
-        var positionRectangleLine = linesIterator.next();
-        var rectangleDimentions = extractSurfaceDimentions(positionRectangleLine);
-        var surface = new SurfaceRectangle(Position.of(0, 0, null), rectangleDimentions[0], rectangleDimentions[1]);
+        // Traitement de la première ligne pour obtenir les dimensions de la surface
+        var lignePositionRectangle = linesIterator.next();
+        var rectangleDimensions = extraireLesDimensionsDeLaSurface(lignePositionRectangle);
+        var surface = new SurfaceRectangle(Position.of(0, 0, null), rectangleDimensions[0], rectangleDimensions[1]);
 
-        List<MoveTondeusePort.TondeuseMoveRequest> requests = new ArrayList<>();
+        List<MoveTondeusePort.DeplacerTondeuseRequete> requetes = new ArrayList<>();
         var index = 1;
 
         while (linesIterator.hasNext()) {
-            String coordinateLine = linesIterator.next();
-            if (isCoordinate(coordinateLine)) {
-                Tondeuse tondeuse = createTondeuse(coordinateLine, index);
+            var ligneCoordonnees = linesIterator.next();
+            if (isCoordinate(ligneCoordonnees)) {
+                var tondeuse = creerTondeuse(ligneCoordonnees, index);
                 index++;
                 // s'assurer qu'il y a une prochaine ligne pour les instructions
                 if (!linesIterator.hasNext()) {
                     throw new IllegalArgumentException("Aucune instruction trouvée pour la tondeuse.");
                 }
 
-                var instructionsLine = linesIterator.next();
-                List<CommandEnum> commands = extractCommands(instructionsLine);
+                var ligneInstructions = linesIterator.next();
+                List<CommandEnum> commands = extractCommands(ligneInstructions);
 
-                requests.add(new MoveTondeusePort.TondeuseMoveRequest(commands, tondeuse, surface));
+                requetes.add(new MoveTondeusePort.DeplacerTondeuseRequete(commands, tondeuse, surface));
             }
         }
 
-        if (requests.isEmpty()) {
+        if (requetes.isEmpty()) {
             throw new IllegalArgumentException("Aucune tondeuse trouvée.");
         }
 
-        return requests.stream().map(request -> {
+        return requetes.stream().map(request -> {
                     try {
-                        return tondeuseService.handle(request);
+                        return deplacerTondeuse.handle(request);
                     } catch (UnknownCommandException e) {
                         return "";
                     }
@@ -77,7 +77,7 @@ public class BatchTondeuseProcessor implements ItemProcessor<String, String> {
         return COORDINATE_PATTERN.matcher(line).matches();
     }
 
-    private int[] extractSurfaceDimentions(String line) {
+    private int[] extraireLesDimensionsDeLaSurface(String line) {
         Matcher matcher = DIMENTIONS_PATTERN.matcher(line);
         if (matcher.matches()) {
             int positionX = Integer.parseInt(matcher.group(1));
@@ -88,7 +88,7 @@ public class BatchTondeuseProcessor implements ItemProcessor<String, String> {
         }
     }
 
-    private Tondeuse createTondeuse(String coordinateLine, int index) throws OrientationNotFoundException {
+    private Tondeuse creerTondeuse(String coordinateLine, int index) throws OrientationNotFoundException {
         Matcher matcher = COORDINATE_PATTERN.matcher(coordinateLine);
         if (matcher.matches()) {
             int positionX = Integer.parseInt(matcher.group(1));
@@ -104,7 +104,7 @@ public class BatchTondeuseProcessor implements ItemProcessor<String, String> {
     private List<CommandEnum> extractCommands(String line) throws CommandNotFoundException {
         Matcher matcher = INSTRUCTIONS_PATTERN.matcher(line);
         if (matcher.find()) {
-            String instructions = matcher.group();
+            var instructions = matcher.group();
             List<CommandEnum> commands = new ArrayList<>();
             for (char instruction : instructions.toCharArray()) {
                 commands.add(CommandEnum.of(String.valueOf(instruction)));
