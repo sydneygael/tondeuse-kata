@@ -36,10 +36,11 @@ class TondeuseControllerTest {
   
   @Test
   void testMoveTondeuseWithOkResponse() throws Exception {
+    var position = Position.of(3, 3, NORTH);
     TondeuseMoveRequest tondeuseMoveRequest = new TondeuseMoveRequest(
         List.of(LEFT, ADVANCE, RIGHT),
-        new Tondeuse(1, Position.of(3, 3), NORTH),
-        new SurfaceRectangle(Position.of(3, 3), 10, 10));
+        new Tondeuse(1, position),
+        new SurfaceRectangle(position, 10, 10));
     when(moveTondeusePort.handle(tondeuseMoveRequest))
         .thenReturn("2 3 N");
     
