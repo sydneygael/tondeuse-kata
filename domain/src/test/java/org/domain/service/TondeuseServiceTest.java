@@ -27,8 +27,9 @@ class TondeuseServiceTest {
   @EnumSource(CommandEnum.class)
   void testHandle(CommandEnum command) throws UnknownCommandException {
     // Given
-    var tondeuse = new Tondeuse(1, Position.of(0, 0,NORTH));
-    var surface = new SurfaceRectangle(Position.of(0, 0,null), 5, 5);
+    var position = Position.of(0, 0, NORTH);
+    var tondeuse = new Tondeuse(1, position);
+    var surface = new SurfaceRectangle(position, 5, 5);
     
     // When
     var result = tondeuseService.handle(new TondeuseMoveRequest(singletonList(command), tondeuse, surface));
