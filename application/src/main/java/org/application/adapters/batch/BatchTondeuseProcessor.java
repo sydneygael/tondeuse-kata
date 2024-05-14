@@ -65,7 +65,7 @@ public class BatchTondeuseProcessor implements ItemProcessor<String, String> {
 
         return requetes.stream().map(request -> {
                     try {
-                        return deplacerTondeuse.handle(request);
+                        return deplacerTondeuse.traiter(request);
                     } catch (UnknownCommandException e) {
                         return "";
                     }

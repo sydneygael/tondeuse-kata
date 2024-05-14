@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/tondeuse")
 public class TondeuseController {
 
-    private final DeplacerTondeuse deplacerTondeuseUseCase;
+    private final DeplacerTondeuse deplacerTondeuse;
 
     public TondeuseController(DeplacerTondeuse deplacerTondeuse) {
-        this.deplacerTondeuseUseCase = deplacerTondeuse;
+        this.deplacerTondeuse = deplacerTondeuse;
     }
 
     @PostMapping("/command")
     public ResponseEntity<String> envoyerCommande(@RequestBody MoveTondeusePort.DeplacerTondeuseRequete request) {
         try {
-            return ResponseEntity.ok(deplacerTondeuseUseCase.handle(request));
+            return ResponseEntity.ok(deplacerTondeuse.traiter(request));
         } catch (UnknownCommandException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

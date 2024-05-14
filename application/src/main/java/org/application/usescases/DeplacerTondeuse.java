@@ -10,7 +10,7 @@ import org.domain.service.TondeuseService;
 public class DeplacerTondeuse implements MoveTondeusePort {
     private final TondeuseService tondeuseService;
     @Override
-    public String handle(DeplacerTondeuseRequete request) throws UnknownCommandException {
+    public String traiter(DeplacerTondeuseRequete request) throws UnknownCommandException {
         return tondeuseService.deplacerTondeuse(request.commands(),request.tondeuse(),request.surface());
     }
 }

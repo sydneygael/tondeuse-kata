@@ -37,11 +37,11 @@ class TondeuseControllerTest {
   @Test
   void testMoveTondeuseWithOkResponse() throws Exception {
     var position = Position.of(3, 3, NORTH);
-    DeplacerTondeuseRequete deplacerTondeuseRequete = new DeplacerTondeuseRequete(
+    var deplacerTondeuseRequete = new DeplacerTondeuseRequete(
         List.of(LEFT, ADVANCE, RIGHT),
         new Tondeuse(1, position),
         new SurfaceRectangle(position, 10, 10));
-    when(moveTondeusePort.handle(deplacerTondeuseRequete))
+    when(moveTondeusePort.traiter(deplacerTondeuseRequete))
         .thenReturn("2 3 N");
     
     mockMvc.perform(post("/api/tondeuse/command")
