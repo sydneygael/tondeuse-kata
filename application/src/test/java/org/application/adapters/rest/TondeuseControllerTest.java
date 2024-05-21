@@ -1,6 +1,7 @@
 package org.application.adapters.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.application.usescases.DeplacerTondeuse;
 import org.domain.models.entities.SurfaceRectangle;
 import org.domain.models.entities.Tondeuse;
 import org.domain.models.valueobjects.Position;
@@ -32,7 +33,7 @@ class TondeuseControllerTest {
   private ObjectMapper objectMapper;
   
   @MockBean
-  private MoveTondeusePort moveTondeusePort;
+  private DeplacerTondeuse deplacerTondeuse;
   
   @Test
   void testMoveTondeuseWithOkResponse() throws Exception {
@@ -41,7 +42,7 @@ class TondeuseControllerTest {
         List.of(LEFT, ADVANCE, RIGHT),
         new Tondeuse(1, position),
         new SurfaceRectangle(position, 10, 10));
-    when(moveTondeusePort.traiter(deplacerTondeuseRequete))
+    when(deplacerTondeuse.traiter(deplacerTondeuseRequete))
         .thenReturn("2 3 N");
     
     mockMvc.perform(post("/api/tondeuse/command")
